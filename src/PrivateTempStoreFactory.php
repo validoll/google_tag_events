@@ -1,0 +1,34 @@
+<?php
+
+namespace Drupal\google_tag_events;
+
+use Drupal\Core\TempStore\PrivateTempStoreFactory as CorePrivateTempStoreFactory;
+use Drupal\Core\TempStore\PrivateTempStore;
+
+/**
+ * Creates a PrivateTempStore object.
+ */
+class PrivateTempStoreFactory extends CorePrivateTempStoreFactory {
+
+  /**
+   * Creates a PrivateTempStore.
+   *
+   * @param string $collection
+   *   The collection name to use for this key/value store. This is typically
+   *   a shared namespace or module name, e.g. 'views', 'entity', etc.
+   *
+   * @return \Drupal\Core\TempStore\PrivateTempStore
+   *   An instance of the key/value store.
+   */
+  public function get($collection) {
+    // Store the data for this collection in the database.
+    $storage = $this->storageFactory->get("user.private_tempstore.$collection");
+    if ($this->currentUser->isAnonymous()) {
+      return new PrivateTempStoreCookie($storage, $this->lockBackend, $this->currentUser, $this->requestStack, $this->expire);
+    }
+    else {
+      return new PrivateTempStore($storage, $this->lockBackend, $this->currentUser, $this->requestStack, $this->expire);
+    }
+  }
+
+}

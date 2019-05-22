@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains google_tag_events.module.
+ */
+
+/**
+ * Get GTM events service.
+ *
+ * @return \Drupal\google_tag_events\GoogleTagEvents
+ *   GTM events service.
+ */
+function google_tag_events_service() {
+  return \Drupal::service('google_tag_events');
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function google_tag_events_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'google_tag_events/tracking';
+  // Add events to drupal settings.
+  google_tag_events_service()->processCurrentEvents($attachments);
+}
+
+/**
+ * Implements hook_ajax_render_alter().
+ */
+function google_tag_events_ajax_render_alter(array &$data) {
+  // Add events to drupal settings.
+  // Set it first to avoid issues with invoking attachment behavior
+  // after executing commands.
+  array_unshift($data, google_tag_events_service()->processAjaxCommandCurrentEvents()->render());
+}

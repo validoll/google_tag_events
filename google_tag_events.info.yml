@@ -1,0 +1,7 @@
+name: 'Google Tag Manager: Events'
+type: module
+description: 'Provide API to create GTM events infrastructure.'
+package: 'Statistics'
+core: 8.x
+dependencies:
+  - drupal:google_tag

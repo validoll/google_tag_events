@@ -1,0 +1,13 @@
+services:
+  google_tag_events:
+    class: Drupal\google_tag_events\GoogleTagEvents
+    arguments: ['@config.factory', '@google_tag_events.private_tempstore', '@plugin.manager.google_tag_events']
+  google_tag_events.private_tempstore:
+    class: Drupal\google_tag_events\PrivateTempStoreFactory
+    arguments: ['@keyvalue.expirable', '@lock', '@current_user', '@request_stack', '%tempstore.expire%']
+    deprecated: The "%service_id%" service is deprecated. You should use the 'tempstore.private' service instead. See https://www.drupal.org/node/2935639.
+    tags:
+      - { name: backend_overridable }
+  plugin.manager.google_tag_events:
+    class: Drupal\google_tag_events\GoogleTagEventsPluginManager
+    parent: default_plugin_manager
