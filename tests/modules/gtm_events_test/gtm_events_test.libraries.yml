@@ -1,0 +1,6 @@
+tracking:
+  js:
+    js/gtm_events_test.js:
+      weight: -1
+  dependencies:
+    - google_tag_events/tracking
