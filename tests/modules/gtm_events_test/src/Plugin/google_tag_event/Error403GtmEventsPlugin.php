@@ -18,7 +18,7 @@ class Error403GtmEventsPlugin extends GoogleTagEventsPluginBase {
    * {@inheritdoc}
    */
   public function process(array $data = NULL) {
-    $data = parent::process($data);
+    $data = $data ?? $this->data;
 
     $data += [
       'event' => '403',

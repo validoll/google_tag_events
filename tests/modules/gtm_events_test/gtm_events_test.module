@@ -35,10 +35,6 @@ function gtm_events_test_page_bottom(array &$page_bottom) {
         google_tag_events_service()->setEvent('gtm_events_test_article_view');
         break;
 
-      case 'page':
-        google_tag_events_service()->setEvent('gtm_events_test_page_view');
-        break;
-
       default:
         break;
     }
@@ -49,7 +45,7 @@ function gtm_events_test_page_bottom(array &$page_bottom) {
   if ($route_name === 'system.403') {
     google_tag_events_service()->setEvent('gtm_events_test_403');
   }
-  elseif ($route_name === 'system.403') {
+  elseif ($route_name === 'system.404') {
     google_tag_events_service()->setEvent('gtm_events_test_404');
   }
 
