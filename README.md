@@ -18,7 +18,7 @@ https://www.drupal.org/docs/extending-drupal/installing-modules
 for further information.
 
 ## CONFIGURATION
-This module provides only APY and has no any specific configs.
+This module provides only API and has no any specific configs.
 
 ## FOR DEVELOPERS
 You can see *gtm_events_test* module for usage examples.
