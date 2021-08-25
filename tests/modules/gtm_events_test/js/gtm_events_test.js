@@ -11,7 +11,7 @@
             // Example of GTM event on anchor click.
             $('a', context).once('processed').each(function () {
                 $(this).on('click', function (e) {
-                    drupalSettings.google_tag_events.gtmEvents['gtm_events_test_click'] = offer_info;
+                    drupalSettings.google_tag_events.gtmEvents['gtm_events_test_click'] = {'foo': 'bar'};
                     Drupal.attachBehaviors(this);
                 });
             });
