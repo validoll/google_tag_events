@@ -1,0 +1,22 @@
+{
+    "name": "drupal/google_tag_events",
+    "description": "Provides API to create GTM events infrastructure.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Vyacheslav Malchik (validoll)",
+            "email": "for@validoll.ru",
+            "homepage": "https://www.drupal.org/u/validoll",
+            "role": "Maintainer"
+        }
+    ],
+    "homepage": "https://drupal.org/project/google_tag_events",
+    "support": {
+        "issues": "https://drupal.org/project/issues/google_tag_events",
+        "source": "https://git.drupalcode.org/project/google_tag_events"
+    },
+    "require": {
+        "drupal/google_tag": "^1.4"
+    }
+}

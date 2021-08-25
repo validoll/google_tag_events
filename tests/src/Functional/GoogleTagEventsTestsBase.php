@@ -9,6 +9,14 @@ use Drupal\Tests\BrowserTestBase;
  */
 abstract class GoogleTagEventsTestsBase extends BrowserTestBase {
 
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stable';
+
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
     $config = $this->config('google_tag.settings');
