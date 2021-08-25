@@ -8,6 +8,23 @@
 use Drupal\Component\Serialization\Json;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function gtm_events_test_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the gtm_events_test module.
+    case 'help.page.gtm_events_test':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Tests and examples for google_tag_events module.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
 
 /**
  * Implements hook_page_bottom().

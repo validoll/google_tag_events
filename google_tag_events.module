@@ -5,6 +5,25 @@
  * Contains google_tag_events.module.
  */
 
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function google_tag_events_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the google_tag_events module.
+    case 'help.page.google_tag_events':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Google Tag Manager: Events module provides
+       API to push events to GTM Datalayer from PHP.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
 /**
  * Get GTM events service.
  *
