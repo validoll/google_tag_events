@@ -5,7 +5,7 @@ namespace Drupal\gtm_events_test\Plugin\google_tag_event;
 use Drupal\google_tag_events\GoogleTagEventsPluginBase;
 
 /**
- * 404 error GTM event plugin.
+ * Error 403 GTM event plugin.
  *
  * @Plugin(
  *   id = "gtm_events_test_403",

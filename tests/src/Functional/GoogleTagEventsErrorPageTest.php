@@ -19,7 +19,11 @@ class GoogleTagEventsErrorPageTest extends GoogleTagEventsTestsBase {
    *
    * @var array
    */
-  public static $modules = ['google_tag', 'google_tag_events', 'gtm_events_test'];
+  public static $modules = [
+    'google_tag',
+    'google_tag_events',
+    'gtm_events_test',
+  ];
 
   /**
    * Test 404 page.

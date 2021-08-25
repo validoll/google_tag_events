@@ -24,6 +24,6 @@ abstract class GoogleTagEventsTestsBase extends BrowserTestBase {
       ->set('container_id', 'GTM-TESTKEY')
       ->set('status_list', '')
       ->save();
- }
+  }
 
 }
