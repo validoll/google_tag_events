@@ -1,7 +1,8 @@
 # Google Tag Manager: Events
 
 ## INTRODUCTION
-The *Google Tag Manager: Events* module provides API to push events to GTM Datalayer from PHP.
+The *Google Tag Manager: Events* module provides API to push events
+to GTM Datalayer from PHP.
 
 * For a full description of the module, visit the project page:
   https://www.drupal.org/project/google_tag_events
@@ -25,8 +26,8 @@ You can see *gtm_events_test* module for usage examples.
 
 ### The goal
 
-You can push an event directly from PHP code. It means that event will be pushed after
-page loading in browser.
+You can push an event directly from PHP code. It means that event will
+be pushed after page loading in browser.
 
 ### How to push event
 
@@ -88,7 +89,12 @@ Then call the service
 /**
  * Implements hook_entity_view().
  */
-function comment_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+function comment_entity_view(
+    array &$build,
+    EntityInterface $entity,
+    EntityViewDisplayInterface $display,
+    $view_mode
+  ) {
   if ($entity instanceof NodeInterface) {
     google_tag_events_service()->setEvent(
       'example_event_node_view',

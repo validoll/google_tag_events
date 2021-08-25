@@ -135,6 +135,7 @@ function gtm_events_test_form_alter(&$form, FormStateInterface $form_state, $for
  * @throws \Drupal\Component\Plugin\Exception\PluginException
  */
 function gtm_events_test_form_submit(array &$form, FormStateInterface $form_state) {
-  // Save event data to temp store coz page will be reloaded/redirected after form submit.
+  // Save event data to temp store coz page will be reloaded/redirected
+  // after form submit.
   google_tag_events_service()->setEvent('gtm_events_test_form_submit', NULL, TRUE);
 }
