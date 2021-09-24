@@ -7,6 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Component\Serialization\Json;
+use Drupal\google_tag_events\Form\SettingsForm;
 
 /**
  * GTM events manager.
@@ -80,6 +81,16 @@ class GoogleTagEvents {
   }
 
   /**
+   * Debug mode status.
+   *
+   * @return bool
+   *   Check debug mode status.
+   */
+  protected function isDebugMode() {
+    return $this->configFactory->get(SettingsForm::CONFIG_NAME)->get('debug_mode');
+  }
+
+  /**
    * Get GTM status.
    *
    * @return bool
@@ -89,6 +100,12 @@ class GoogleTagEvents {
     static $satisfied;
 
     if (!isset($satisfied)) {
+      if ($this->isDebugMode()) {
+        $satisfied = TRUE;
+
+        return TRUE;
+      }
+
       if (empty($this->getGoogleTagConfig()->get('container_id'))) {
         // No container ID.
         return FALSE;

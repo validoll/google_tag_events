@@ -1,0 +1,7 @@
+google_tag_events.settings:
+  type: config_object
+  label: 'Module settings'
+  mapping:
+    debug_mode:
+      type: boolean
+      label: 'Debug mode'

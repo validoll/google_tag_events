@@ -3,5 +3,6 @@ type: module
 description: 'Provide API to create GTM events infrastructure.'
 package: 'Statistics'
 core_version_requirement: ^8.8 || ^9
+configure: google_tag_events.settings_form
 dependencies:
   - drupal:google_tag
