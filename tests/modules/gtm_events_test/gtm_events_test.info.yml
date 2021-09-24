@@ -1,6 +1,6 @@
 name: 'Google Tag Manager Events Test'
 type: module
-description: Testing module for GTM events functionality.
+description: 'Testing module for GTM events functionality.'
 package: Testing
-core: 8.x
+core_version_requirement: ^8.8 || ^9
 hidden: TRUE
