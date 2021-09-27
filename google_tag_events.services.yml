@@ -11,3 +11,6 @@ services:
   plugin.manager.google_tag_events:
     class: Drupal\google_tag_events\GoogleTagEventsPluginManager
     parent: default_plugin_manager
+  google_tag_events.lazy_builder:
+    class: Drupal\google_tag_events\LazyBuilder
+    arguments: ['@google_tag_events']

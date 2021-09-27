@@ -52,3 +52,17 @@ function google_tag_events_ajax_render_alter(array &$data) {
   // after executing commands.
   array_unshift($data, google_tag_events_service()->processAjaxCommandCurrentEvents()->render());
 }
+
+
+/**
+ * Implements hook_page_bottom().
+ */
+function google_tag_events_page_bottom(array &$page_bottom) {
+  $page_bottom['google_tag_events'] = [
+    '#lazy_builder' => [
+      'google_tag_events.lazy_builder:getEvents',
+      [],
+    ],
+    '#create_placeholder' => TRUE,
+  ];
+}

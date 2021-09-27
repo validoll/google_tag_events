@@ -220,17 +220,10 @@ class GoogleTagEvents {
    *   Page or element build array.
    */
   public function processCurrentEvents(array &$build) {
-    $grmEventsDruupalSettings = &$build['#attached']['drupalSettings'][static::TYPE];
+    $grmEventsDrupalSettings = &$build['#attached']['drupalSettings'][static::TYPE];
 
-    $grmEventsDruupalSettings['enabled'] = $this->gtmIsEnabled();
-    $grmEventsDruupalSettings['weights'] = $this->getEventsWeightsList();
-
-    foreach ($this->currentEvents as $event => $data) {
-      $grmEventsDruupalSettings['gtmEvents'][$event] = $data;
-
-      unset($this->currentEvents[$event]);
-    }
-    $this->tempStore->delete(static::TYPE);
+    $grmEventsDrupalSettings['enabled'] = $this->gtmIsEnabled();
+    $grmEventsDrupalSettings['weights'] = $this->getEventsWeightsList();
   }
 
   /**
