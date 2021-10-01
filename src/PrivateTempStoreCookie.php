@@ -23,7 +23,7 @@ class PrivateTempStoreCookie extends PrivateTempStore {
   public function get($key) {
     $key = static::COOKIE_PREFIX . $key;
 
-    return isset($_COOKIE[$key]) ? unserialize($_COOKIE[$key]) : NULL;
+    return $_COOKIE[$key] ?? NULL;
   }
 
   /**
@@ -40,7 +40,6 @@ class PrivateTempStoreCookie extends PrivateTempStore {
       return;
     }
     $key = static::COOKIE_PREFIX . $key;
-    $value = serialize($value);
     $params = session_get_cookie_params();
     $expire_time = $this->requestStack->getCurrentRequest()->server->get('REQUEST_TIME') + $this->expire;
     setcookie($key, $value, $expire_time, $params['path'], $params['domain']);

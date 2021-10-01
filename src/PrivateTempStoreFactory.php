@@ -27,7 +27,13 @@ class PrivateTempStoreFactory extends CorePrivateTempStoreFactory {
       return new PrivateTempStoreCookie($storage, $this->lockBackend, $this->currentUser, $this->requestStack, $this->expire);
     }
     else {
-      return new PrivateTempStore($storage, $this->lockBackend, $this->currentUser, $this->requestStack, $this->expire);
+      // Move data fom cookie to temp store.
+      $cookie_temp_store = new PrivateTempStoreCookie($storage, $this->lockBackend, $this->currentUser, $this->requestStack, $this->expire);
+      $temp_store = new PrivateTempStore($storage, $this->lockBackend, $this->currentUser, $this->requestStack, $this->expire);
+      $temp_store->set($collection, $cookie_temp_store->get($collection) ?? []);
+      $cookie_temp_store->deleteAll();
+
+      return $temp_store;
     }
   }
 

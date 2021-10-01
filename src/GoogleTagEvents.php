@@ -67,7 +67,7 @@ class GoogleTagEvents {
     $this->configFactory = $config_factory;
     $this->tempStore = $temp_store_factory->get(static::TYPE);
     $this->pluginManager = $plugin_manager;
-    $this->currentEvents = $this->tempStore->get(static::TYPE) ?? [];
+    $this->currentEvents = unserialize($this->tempStore->get(static::TYPE)) ?: [];
   }
 
   /**
@@ -136,7 +136,7 @@ class GoogleTagEvents {
    * Save events to storage.
    */
   public function saveEvents() {
-    $this->tempStore->set(static::TYPE, $this->currentEvents);
+    $this->tempStore->set(static::TYPE, serialize($this->currentEvents));
   }
 
   /**
