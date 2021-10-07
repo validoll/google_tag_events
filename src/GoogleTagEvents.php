@@ -144,14 +144,14 @@ class GoogleTagEvents {
    *
    * @param string $name
    *   Event name.
-   * @param mixed $data
+   * @param array $data
    *   Event data.
    * @param bool $save_to_tempstore
    *   Save data to temp storage if TRUE.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function setEvent($name, $data = NULL, $save_to_tempstore = FALSE) {
+  public function setEvent(string $name, array $data = [], bool $save_to_tempstore = FALSE) {
     if (!$this->gtmIsEnabled()) {
       return;
     }
@@ -164,9 +164,17 @@ class GoogleTagEvents {
       $plugin = $this->pluginManager->createInstance($name, ['data' => $data]);
       $data = $plugin->process($data);
     }
+    else {
+      $data['event'] = $data['event'] ?? $name;
+    }
+
+    if (empty($data)) {
+      return;
+    }
 
     $this->currentEvents[$name] = $this->currentEvents[$name] ?? [];
     $this->currentEvents[$name] += $data;
+
     if ($save_to_tempstore) {
       $this->saveEvents();
     }
