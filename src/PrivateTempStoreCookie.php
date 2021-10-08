@@ -9,37 +9,42 @@ use Drupal\Core\TempStore\PrivateTempStore;
  */
 class PrivateTempStoreCookie extends PrivateTempStore {
 
+  /**
+   * Use this prefix to determine GTE cookie value.
+   */
   const COOKIE_PREFIX = 'gte_ptsc_';
 
   /**
-   * Retrieves a value from this PrivateTempStore for a given key.
-   *
-   * @param string $key
-   *   The key of the data to retrieve.
-   *
-   * @return mixed
-   *   The data associated with the key, or NULL if the key does not exist.
+   * {@inheritDoc}
+   */
+  protected function createkey($key) {
+    return self::COOKIE_PREFIX . $key;
+  }
+
+  /**
+   * {@inheritDoc}
    */
   public function get($key) {
-    $key = static::COOKIE_PREFIX . $key;
+    $key = $this->createkey($key);
 
     return $_COOKIE[$key] ?? NULL;
   }
 
   /**
-   * Stores a particular key/value pair in this PrivateTempStore.
-   *
-   * @param string $key
-   *   The key of the data to store.
-   * @param mixed $value
-   *   The data to store.
+   * {@inheritDoc}
    */
   public function set($key, $value) {
+    // Skip cookie modifying if headrs already sent.
+    if(headers_sent()) {
+      return;
+    }
+
     if (empty($value)) {
       $this->delete($key);
       return;
     }
-    $key = static::COOKIE_PREFIX . $key;
+
+    $key = $this->createkey($key);
     $params = session_get_cookie_params();
     $expire_time = $this->requestStack->getCurrentRequest()->server->get('REQUEST_TIME') + $this->expire;
     setcookie($key, $value, $expire_time, $params['path'], $params['domain']);
@@ -47,10 +52,15 @@ class PrivateTempStoreCookie extends PrivateTempStore {
   }
 
   /**
-   * Deletes data from the store for a given key and releases the lock on it.
+   * {@inheritDoc}
    */
   public function delete($key) {
-    $key = static::COOKIE_PREFIX . $key;
+    // Skip cookie modifying if headrs already sent.
+    if(headers_sent()) {
+      return;
+    }
+
+    $key = $this->createkey($key);
     $params = session_get_cookie_params();
     setcookie($key, NULL, -1, $params['path'], $params['domain']);
     unset($_COOKIE[$key]);
@@ -60,9 +70,15 @@ class PrivateTempStoreCookie extends PrivateTempStore {
    * Deletes all PrivateTempStoreCookie cookies.
    */
   public function deleteAll() {
+    // Skip cookie modifying if headrs already sent.
+    if(headers_sent()) {
+      return;
+    }
+
     $params = session_get_cookie_params();
     foreach ($_COOKIE as $key => $cookie) {
-      if (strpos($key, static::COOKIE_PREFIX) === 0) {
+      $key = $this->createkey($key);
+      if (strpos($key, static::COOKIE_PREFIX) !== FALSE) {
         setcookie($key, NULL, -1, $params['path'], $params['domain']);
         unset($_COOKIE[$key]);
       }
