@@ -35,7 +35,7 @@ class PrivateTempStoreCookie extends PrivateTempStore {
    */
   public function set($key, $value) {
     // Skip cookie modifying if headrs already sent.
-    if(headers_sent()) {
+    if (headers_sent()) {
       return;
     }
 
@@ -56,7 +56,7 @@ class PrivateTempStoreCookie extends PrivateTempStore {
    */
   public function delete($key) {
     // Skip cookie modifying if headrs already sent.
-    if(headers_sent()) {
+    if (headers_sent()) {
       return;
     }
 
@@ -71,7 +71,7 @@ class PrivateTempStoreCookie extends PrivateTempStore {
    */
   public function deleteAll() {
     // Skip cookie modifying if headrs already sent.
-    if(headers_sent()) {
+    if (headers_sent()) {
       return;
     }
 
