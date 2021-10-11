@@ -77,7 +77,6 @@ class PrivateTempStoreCookie extends PrivateTempStore {
 
     $params = session_get_cookie_params();
     foreach ($_COOKIE as $key => $cookie) {
-      $key = $this->createkey($key);
       if (strpos($key, static::COOKIE_PREFIX) !== FALSE) {
         setcookie($key, NULL, -1, $params['path'], $params['domain']);
         unset($_COOKIE[$key]);
