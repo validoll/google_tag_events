@@ -3,13 +3,14 @@
 namespace Drupal\google_tag_events;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Security\TrustedCallbackInterface;
 
 /**
  * Lazy builder callback class.
  *
  * @package Drupal\google_tag_events
  */
-class LazyBuilder {
+class LazyBuilder implements TrustedCallbackInterface {
 
   /**
    * The Google Tag Events service object.
@@ -26,6 +27,13 @@ class LazyBuilder {
    */
   public function __construct(GoogleTagEvents $google_tag_events_service) {
     $this->googleTagEvents = $google_tag_events_service;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public static function trustedCallbacks() {
+    return ['getEvents'];
   }
 
   /**
