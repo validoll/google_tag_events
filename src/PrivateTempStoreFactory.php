@@ -44,7 +44,7 @@ class PrivateTempStoreFactory extends CorePrivateTempStoreFactory {
    */
   public function get($collection) {
     // Store the data for this collection in the database.
-    $storage = $this->storageFactory->get("user.private_tempstore.$collection");
+    $storage = $this->storageFactory->get("tempstore.private.$collection");
     if ($this->currentUser->isAnonymous()) {
       return new $this->privateTempStoreClass($storage, $this->lockBackend, $this->currentUser, $this->requestStack, $this->expire);
     }
