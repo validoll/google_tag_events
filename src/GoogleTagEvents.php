@@ -4,9 +4,11 @@ namespace Drupal\google_tag_events;
 
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Component\Serialization\Json;
+use Drupal\google_tag\Entity\ContainerManagerInterface;
 use Drupal\google_tag_events\Form\SettingsForm;
 
 /**
@@ -54,6 +56,20 @@ class GoogleTagEvents {
   protected $currentEvents = [];
 
   /**
+   * The GTM container manager.
+   *
+   * @var \Drupal\google_tag\Entity\ContainerManagerInterface
+   */
+  protected $containerManager;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * GoogleTagEvents constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -62,12 +78,24 @@ class GoogleTagEvents {
    *   Temporary storage.
    * @param \Drupal\google_tag_events\GoogleTagEventsPluginManager $plugin_manager
    *   GTM events plugin manager.
+   * @param \Drupal\google_tag\Entity\ContainerManagerInterface $container_manager
+   *   The GTM container manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, PrivateTempStoreFactory $temp_store_factory, GoogleTagEventsPluginManager $plugin_manager) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    PrivateTempStoreFactory $temp_store_factory,
+    GoogleTagEventsPluginManager $plugin_manager,
+    ContainerManagerInterface $container_manager,
+    EntityTypeManagerInterface $entity_type_manager
+  ) {
     $this->configFactory = $config_factory;
     $this->tempStore = $temp_store_factory->get(static::TYPE);
     $this->pluginManager = $plugin_manager;
     $this->currentEvents = unserialize($this->tempStore->get(static::TYPE) ?: 'a:0:{}');
+    $this->containerManager = $container_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -106,15 +134,17 @@ class GoogleTagEvents {
         return TRUE;
       }
 
-      if (empty($this->getGoogleTagConfig()->get('container_id'))) {
-        // No container ID.
-        return FALSE;
-      }
+      $ids = $this->containerManager->loadContainerIDs();
+      $containers = $this->entityTypeManager->getStorage('google_tag_container')->loadMultiple($ids);
 
-      $satisfied = TRUE;
-      if (!_google_tag_status_check() || !_google_tag_path_check() || !_google_tag_role_check()) {
-        // Omit if any condition is not met.
-        $satisfied = FALSE;
+      foreach ($containers as $container) {
+        if (!$container->insertSnippet()) {
+          continue;
+        }
+
+        $satisfied = TRUE;
+
+        break;
       }
     }
 

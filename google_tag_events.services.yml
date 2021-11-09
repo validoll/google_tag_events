@@ -1,7 +1,7 @@
 services:
   google_tag_events:
     class: Drupal\google_tag_events\GoogleTagEvents
-    arguments: ['@config.factory', '@google_tag_events.private_tempstore', '@plugin.manager.google_tag_events']
+    arguments: ['@config.factory', '@google_tag_events.private_tempstore', '@plugin.manager.google_tag_events', '@google_tag.container_manager', '@entity_type.manager']
   google_tag_events.private_tempstore:
     class: Drupal\google_tag_events\PrivateTempStoreFactory
     arguments: ['@keyvalue.expirable', '@lock', '@current_user', '@request_stack', '%tempstore.expire%']
