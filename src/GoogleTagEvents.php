@@ -138,7 +138,7 @@ class GoogleTagEvents {
       $containers = $this->entityTypeManager->getStorage('google_tag_container')->loadMultiple($ids);
 
       foreach ($containers as $container) {
-        if (!$container->insertSnippet()) {
+        if (!$container->access('view')) {
           continue;
         }
 
