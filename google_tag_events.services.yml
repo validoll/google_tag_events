@@ -1,10 +1,10 @@
 services:
   google_tag_events:
     class: Drupal\google_tag_events\GoogleTagEvents
-    arguments: ['@config.factory', '@google_tag_events.private_tempstore', '@plugin.manager.google_tag_events', '@google_tag.container_manager', '@entity_type.manager']
+    arguments: ['@config.factory', '@google_tag_events.private_tempstore', '@plugin.manager.google_tag_events', '@google_tag.container_manager', '@entity_type.manager', '@logger.channel.google_tag_events']
   google_tag_events.private_tempstore:
     class: Drupal\google_tag_events\PrivateTempStoreFactory
-    arguments: ['@keyvalue.expirable', '@lock', '@current_user', '@request_stack', '%tempstore.expire%']
+    arguments: ['@keyvalue.expirable', '@lock', '@current_user', '@request_stack', '%tempstore.expire%', '@logger.channel.google_tag_events']
     deprecated: The "%service_id%" service is deprecated. You should use the 'tempstore.private' service instead. See https://www.drupal.org/node/2935639.
     tags:
       - { name: backend_overridable }
@@ -14,3 +14,6 @@ services:
   google_tag_events.lazy_builder:
     class: Drupal\google_tag_events\LazyBuilder
     arguments: ['@google_tag_events']
+  logger.channel.google_tag_events:
+    parent: logger.channel_base
+    arguments: ['google_tag_events']

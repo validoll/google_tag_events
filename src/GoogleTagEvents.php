@@ -8,8 +8,10 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\TempStore\TempStoreException;
 use Drupal\google_tag\Entity\ContainerManagerInterface;
 use Drupal\google_tag_events\Form\SettingsForm;
+use Psr\Log\LoggerInterface;
 
 /**
  * GTM events manager.
@@ -70,6 +72,13 @@ class GoogleTagEvents {
   protected $entityTypeManager;
 
   /**
+   * The logger instance.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * GoogleTagEvents constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -82,13 +91,16 @@ class GoogleTagEvents {
    *   The GTM container manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Psr\Log\LoggerInterface $entity_type_manager
+   *   The logger instance.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     PrivateTempStoreFactory $temp_store_factory,
     GoogleTagEventsPluginManager $plugin_manager,
     ContainerManagerInterface $container_manager,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    LoggerInterface $logger
   ) {
     $this->configFactory = $config_factory;
     $this->tempStore = $temp_store_factory->get(static::TYPE);
@@ -96,6 +108,7 @@ class GoogleTagEvents {
     $this->currentEvents = unserialize($this->tempStore->get(static::TYPE) ?: 'a:0:{}');
     $this->containerManager = $container_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->logger = $logger;
   }
 
   /**
@@ -166,7 +179,12 @@ class GoogleTagEvents {
    * Save events to storage.
    */
   public function saveEvents() {
-    $this->tempStore->set(static::TYPE, serialize($this->currentEvents));
+    try {
+      $this->tempStore->set(static::TYPE, serialize($this->currentEvents));
+    }
+    catch (TempStoreException $e) {
+      $this->logger->error($e->getMessage());
+    }
   }
 
   /**
