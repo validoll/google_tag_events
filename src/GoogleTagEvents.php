@@ -266,7 +266,13 @@ class GoogleTagEvents {
    */
   public function flushEvents() {
     $this->currentEvents = [];
-    $this->tempStore->delete(static::TYPE);
+
+    try {
+      $this->tempStore->delete(static::TYPE);
+    }
+    catch (TempStoreException $e) {
+      $this->logger->error($e->getMessage());
+    }
   }
 
   /**
