@@ -53,7 +53,6 @@ function google_tag_events_ajax_render_alter(array &$data) {
   array_unshift($data, google_tag_events_service()->processAjaxCommandCurrentEvents()->render());
 }
 
-
 /**
  * Implements hook_page_bottom().
  */

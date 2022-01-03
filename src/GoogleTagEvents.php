@@ -91,7 +91,7 @@ class GoogleTagEvents {
    *   The GTM container manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Psr\Log\LoggerInterface $entity_type_manager
+   * @param \Psr\Log\LoggerInterface $logger
    *   The logger instance.
    */
   public function __construct(
@@ -165,17 +165,6 @@ class GoogleTagEvents {
   }
 
   /**
-   * GoogleTagEvents destructor.
-   *
-   * Use to store list of events in session.
-   *
-   * @throws \Drupal\Core\TempStore\TempStoreException
-   */
-  public function __destruct() {
-    $this->saveEvents();
-  }
-
-  /**
    * Save events to storage.
    */
   public function saveEvents() {
@@ -199,7 +188,7 @@ class GoogleTagEvents {
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function setEvent(string $name, array $data = [], bool $save_to_tempstore = FALSE) {
+  public function setEvent(string $name, array $data = [], bool $save_to_tempstore = TRUE) {
     if (!$this->gtmIsEnabled()) {
       return;
     }
@@ -298,9 +287,11 @@ class GoogleTagEvents {
 
     foreach ($this->currentEvents as $event => $data) {
       $setting[static::TYPE]['gtmEvents'][$event] = $data;
-
-      unset($this->currentEvents[$event]);
     }
+
+    // Flush events:
+    $this->flushEvents();
+
     return new SettingsCommand($setting, TRUE);
   }
 
