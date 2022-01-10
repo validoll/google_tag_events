@@ -289,7 +289,7 @@ class GoogleTagEvents {
       $setting[static::TYPE]['gtmEvents'][$event] = $data;
     }
 
-    // Flush events:
+    // Flush events.
     $this->flushEvents();
 
     return new SettingsCommand($setting, TRUE);
