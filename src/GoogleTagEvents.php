@@ -105,7 +105,7 @@ class GoogleTagEvents {
     $this->configFactory = $config_factory;
     $this->tempStore = $temp_store_factory->get(static::TYPE);
     $this->pluginManager = $plugin_manager;
-    $this->currentEvents = unserialize($this->tempStore->get(static::TYPE) ?: 'a:0:{}');
+    $this->currentEvents = unserialize((string) $this->tempStore->get(static::TYPE) ?: 'a:0:{}');
     $this->containerManager = $container_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger;

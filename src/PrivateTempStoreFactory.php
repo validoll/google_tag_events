@@ -63,14 +63,14 @@ class PrivateTempStoreFactory extends CorePrivateTempStoreFactory {
     }
     else {
       $temp_store = new PrivateTempStore($storage, $this->lockBackend, $this->currentUser, $this->requestStack, $this->expire);
-      $cookie_temp_store_value = unserialize($cookie_temp_store->get($collection)) ?: [];
+      $cookie_temp_store_value = unserialize((string) $cookie_temp_store->get($collection)) ?: [];
 
       if (empty($cookie_temp_store_value)) {
         return $temp_store;
       }
 
       // Move data fom cookie to temp store.
-      $temp_store_value = unserialize($temp_store->get($collection)) ?: [];
+      $temp_store_value = unserialize((string) $temp_store->get($collection)) ?: [];
       $temp_store_value += $cookie_temp_store_value;
 
       try {
