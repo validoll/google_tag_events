@@ -9,7 +9,7 @@ drupalSettings.google_tag_events = drupalSettings.google_tag_events || {};
 drupalSettings.google_tag_events.gtmEvents = drupalSettings.google_tag_events.gtmEvents || {};
 drupalSettings.google_tag_events.enabled = drupalSettings.google_tag_events.enabled || false;
 
-(function ($) {
+(function ($, once) {
     'use strict';
 
     // Behavior to push events.
@@ -21,10 +21,10 @@ drupalSettings.google_tag_events.enabled = drupalSettings.google_tag_events.enab
                 return;
             }
 
+
             // Add events from inline definition.
-            $("[data-selector='google_tag_events']").once('processed').each(function () {
-                var $this = $(this),
-                    events = JSON.parse($this.html());
+            once('processed', "[data-selector='google_tag_events']").forEach(function (elem) {
+                var events = JSON.parse($(elem).html());
                 $.extend(drupalSettings.google_tag_events.gtmEvents, events);
             });
 
@@ -49,4 +49,4 @@ drupalSettings.google_tag_events.enabled = drupalSettings.google_tag_events.enab
         }
     };
 
-}(jQuery));
+}(jQuery, once));
