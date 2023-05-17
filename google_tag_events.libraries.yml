@@ -5,3 +5,4 @@ tracking:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - core/once
