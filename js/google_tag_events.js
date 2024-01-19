@@ -53,9 +53,9 @@ window.dataLayer = window.dataLayer || [];
           // have been sent so the cookie cannot be removed. This can cause
           // the event to be pushed multiple times. For this case
           // we remove the cookie here.
-          $.removeCookie('gte_ptsc_google_tag_events', {path: "/", domain: window.location.host})
+          $.removeCookie('STYXKEY_gte_ptsc_google_tag_events', {path: "/", domain: window.location.host})
           if (cookies) {
-            cookies.remove('gte_ptsc_google_tag_events', {path: "/", domain: window.location.host})
+            cookies.remove('STYXKEY_gte_ptsc_google_tag_events', {path: "/", domain: window.location.host})
           }
         }
     };

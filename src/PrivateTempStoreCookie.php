@@ -12,7 +12,7 @@ class PrivateTempStoreCookie extends PrivateTempStore {
   /**
    * Use this prefix to determine GTE cookie value.
    */
-  const COOKIE_PREFIX = 'gte_ptsc_';
+  const COOKIE_PREFIX = 'STYXKEY_gte_ptsc_';
 
   /**
    * {@inheritDoc}
