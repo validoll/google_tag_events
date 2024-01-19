@@ -5,12 +5,13 @@
 
 window.dataLayer = window.dataLayer || [];
 
-drupalSettings.google_tag_events = drupalSettings.google_tag_events || {};
-drupalSettings.google_tag_events.gtmEvents = drupalSettings.google_tag_events.gtmEvents || {};
-drupalSettings.google_tag_events.enabled = drupalSettings.google_tag_events.enabled || false;
+(function ($, Drupal, once, drupalSettings, cookies) {
 
-(function ($, once) {
     'use strict';
+
+    drupalSettings.google_tag_events = drupalSettings.google_tag_events || {};
+    drupalSettings.google_tag_events.gtmEvents = drupalSettings.google_tag_events.gtmEvents || {};
+    drupalSettings.google_tag_events.enabled = drupalSettings.google_tag_events.enabled || false;
 
     // Behavior to push events.
     Drupal.behaviors.google_tag_events = {
@@ -23,10 +24,11 @@ drupalSettings.google_tag_events.enabled = drupalSettings.google_tag_events.enab
 
 
             // Add events from inline definition.
-            once('processed', "[data-selector='google_tag_events']").forEach(function (elem) {
-                var events = JSON.parse($(elem).html());
-                $.extend(drupalSettings.google_tag_events.gtmEvents, events);
-            });
+          once('processed', "[data-selector='google_tag_events']").forEach(function () {
+            var $this = $(this),
+              events = JSON.parse($this.html());
+            extend(drupalSettings.google_tag_events.gtmEvents, events);
+          });
 
             // Sort events by weight.
             var weights = drupalSettings.google_tag_events.weights,
@@ -46,7 +48,16 @@ drupalSettings.google_tag_events.enabled = drupalSettings.google_tag_events.enab
                 window.dataLayer.push(event);
                 delete drupalSettings.google_tag_events.gtmEvents[name]
             }
+
+          // When running in bigpipe the event is flushed after headers
+          // have been sent so the cookie cannot be removed. This can cause
+          // the event to be pushed multiple times. For this case
+          // we remove the cookie here.
+          $.removeCookie('gte_ptsc_google_tag_events', {path: "/", domain: window.location.host})
+          if (cookies) {
+            cookies.remove('gte_ptsc_google_tag_events', {path: "/", domain: window.location.host})
+          }
         }
     };
 
-}(jQuery, once));
+}(jQuery, Drupal, once, drupalSettings, window.Cookies));
