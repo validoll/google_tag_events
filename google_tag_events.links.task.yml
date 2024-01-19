@@ -1,4 +1,4 @@
 google_tag_events.settings_form_tab:
   route_name: google_tag_events.settings_form
   title: Events settings
-  base_route: entity.google_tag_container.collection
+  base_route: entity.google_tag_container.single_form

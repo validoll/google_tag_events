@@ -9,7 +9,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\TempStore\TempStoreException;
-use Drupal\google_tag\Entity\ContainerManagerInterface;
+use Drupal\google_tag\TagContainerResolver;
 use Drupal\google_tag_events\Form\SettingsForm;
 use Psr\Log\LoggerInterface;
 
@@ -60,9 +60,9 @@ class GoogleTagEvents {
   /**
    * The GTM container manager.
    *
-   * @var \Drupal\google_tag\Entity\ContainerManagerInterface
+   * @var \Drupal\google_tag\TagContainerResolver
    */
-  protected $containerManager;
+  protected $tagContainerResolver;
 
   /**
    * The entity type manager.
@@ -87,7 +87,7 @@ class GoogleTagEvents {
    *   Temporary storage.
    * @param \Drupal\google_tag_events\GoogleTagEventsPluginManager $plugin_manager
    *   GTM events plugin manager.
-   * @param \Drupal\google_tag\Entity\ContainerManagerInterface $container_manager
+   * @param \Drupal\google_tag\TagContainerResolver $tag_container_resolver
    *   The GTM container manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
@@ -98,15 +98,18 @@ class GoogleTagEvents {
     ConfigFactoryInterface $config_factory,
     PrivateTempStoreFactory $temp_store_factory,
     GoogleTagEventsPluginManager $plugin_manager,
-    ContainerManagerInterface $container_manager,
+    TagContainerResolver $tag_container_resolver,
     EntityTypeManagerInterface $entity_type_manager,
     LoggerInterface $logger
   ) {
     $this->configFactory = $config_factory;
     $this->tempStore = $temp_store_factory->get(static::TYPE);
     $this->pluginManager = $plugin_manager;
-    $this->currentEvents = unserialize((string) $this->tempStore->get(static::TYPE) ?: 'a:0:{}');
-    $this->containerManager = $container_manager;
+    $this->currentEvents = unserialize(
+      (string) $this->tempStore->get(static::TYPE) ?: 'a:0:{}',
+      ['allowed_classes' => TRUE]
+    );
+    $this->tagContainerResolver = $tag_container_resolver;
     $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger;
   }
@@ -147,18 +150,8 @@ class GoogleTagEvents {
         return TRUE;
       }
 
-      $ids = $this->containerManager->loadContainerIDs();
-      $containers = $this->entityTypeManager->getStorage('google_tag_container')->loadMultiple($ids);
-
-      foreach ($containers as $container) {
-        if (!$container->access('view')) {
-          continue;
-        }
-
-        $satisfied = TRUE;
-
-        break;
-      }
+      $resolved_tag_container = $this->tagContainerResolver->resolve();
+      $satisfied = !empty($resolved_tag_container);
     }
 
     return $satisfied;
