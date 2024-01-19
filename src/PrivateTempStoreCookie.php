@@ -47,7 +47,7 @@ class PrivateTempStoreCookie extends PrivateTempStore {
     $key = $this->createkey($key);
     $params = session_get_cookie_params();
     $expire_time = $this->requestStack->getCurrentRequest()->server->get('REQUEST_TIME') + $this->expire;
-    setcookie($key, $value, $expire_time, $params['path'], $params['domain']);
+    setcookie($key, $value, $expire_time, $params['path'], $params['domain'], TRUE);
     $_COOKIE[$key] = $value;
   }
 
@@ -62,7 +62,7 @@ class PrivateTempStoreCookie extends PrivateTempStore {
 
     $key = $this->createkey($key);
     $params = session_get_cookie_params();
-    setcookie($key, '', -1, $params['path'], $params['domain']);
+    setcookie($key, '', -1, $params['path'], $params['domain'], TRUE);
     unset($_COOKIE[$key]);
   }
 
@@ -78,7 +78,7 @@ class PrivateTempStoreCookie extends PrivateTempStore {
     $params = session_get_cookie_params();
     foreach ($_COOKIE as $key => $cookie) {
       if (strpos($key, static::COOKIE_PREFIX) !== FALSE) {
-        setcookie($key, '', -1, $params['path'], $params['domain']);
+        setcookie($key, '', -1, $params['path'], $params['domain'], TRUE);
         unset($_COOKIE[$key]);
       }
     }
