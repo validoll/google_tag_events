@@ -12,18 +12,18 @@ abstract class GoogleTagEventsTestsBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stable';
+  protected $defaultTheme = 'starterkit_theme';
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
-    $config = $this->config('google_tag.settings');
-    $config
-      ->set('container_id', 'GTM-TESTKEY')
-      ->set('status_list', '')
-      ->save();
+
+    // Enable debug mode.
+    $config = $this->config('google_tag_events.settings');
+    $config->set('debug_mode', TRUE);
+    $config->save();
   }
 
 }

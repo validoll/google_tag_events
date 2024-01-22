@@ -10,16 +10,11 @@ namespace Drupal\Tests\google_tag_events\Functional;
 class GoogleTagEventsErrorPageTest extends GoogleTagEventsTestsBase {
 
   /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stable';
-
-  /**
    * Modules to install.
    *
    * @var array
    */
-  public static $modules = [
+  protected static  $modules = [
     'google_tag',
     'google_tag_events',
     'gtm_events_test',
@@ -31,16 +26,18 @@ class GoogleTagEventsErrorPageTest extends GoogleTagEventsTestsBase {
   public function test404Page() {
     // Go to wrong url.
     $this->drupalGet('wrong/url');
-    $this->assertSession()->elementTextContains('css', 'script[data-selector="google_tag_events"]', '{"gtm_events_test_404":{"event":"404"}}');
+    $this->assertSession()->statusCodeEquals(404);
+    $this->assertSession()->elementContains('css', 'script[data-selector="google_tag_events"]', '{"gtm_events_test_404":{"event":"404"}}');
   }
 
   /**
    * Test 403 page.
    */
   public function test403Page() {
-    // User logout page is not allowed for anonymous.
-    $this->drupalGet('user/logout');
-    $this->assertSession()->elementTextContains('css', 'script[data-selector="google_tag_events"]', '{"gtm_events_test_403":{"event":"403"}}');
+    // Admin page is not allowed for anonymous.
+    $this->drupalGet('admin');
+    $this->assertSession()->statusCodeEquals(403);
+    $this->assertSession()->elementContains('css', 'script[data-selector="google_tag_events"]', '{"gtm_events_test_403":{"event":"403"}}');
   }
 
 }

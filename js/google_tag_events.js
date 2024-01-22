@@ -24,10 +24,10 @@ window.dataLayer = window.dataLayer || [];
 
 
             // Add events from inline definition.
-          once('processed', "[data-selector='google_tag_events']").forEach(function () {
-            var $this = $(this),
-              events = JSON.parse($this.html());
-            extend(drupalSettings.google_tag_events.gtmEvents, events);
+          once('processed', "[data-selector='google_tag_events']").forEach(function (el) {
+            var $el = $(el),
+              events = JSON.parse($el.html());
+            $.extend(drupalSettings.google_tag_events.gtmEvents, events);
           });
 
             // Sort events by weight.
@@ -53,7 +53,6 @@ window.dataLayer = window.dataLayer || [];
           // have been sent so the cookie cannot be removed. This can cause
           // the event to be pushed multiple times. For this case
           // we remove the cookie here.
-          $.removeCookie('STYXKEY_gte_ptsc_google_tag_events', {path: "/", domain: window.location.host})
           if (cookies) {
             cookies.remove('STYXKEY_gte_ptsc_google_tag_events', {path: "/", domain: window.location.host})
           }
