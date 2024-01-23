@@ -14,10 +14,8 @@ class LazyBuilder implements TrustedCallbackInterface {
 
   /**
    * The Google Tag Events service object.
-   *
-   * @var GoogleTagEvents
    */
-  protected $googleTagEvents;
+  protected GoogleTagEvents $googleTagEvents;
 
   /**
    * Lazy builder constructor.
@@ -30,7 +28,7 @@ class LazyBuilder implements TrustedCallbackInterface {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritdoc}
    */
   public static function trustedCallbacks() {
     return ['getEvents'];
@@ -44,6 +42,7 @@ class LazyBuilder implements TrustedCallbackInterface {
    */
   public function getEvents() {
     $events = $this->googleTagEvents->getEvents();
+
     if (empty($events)) {
       return [];
     }

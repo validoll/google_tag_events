@@ -3,6 +3,7 @@
 namespace Drupal\gtm_events_test\Plugin\google_tag_event;
 
 use Drupal\google_tag_events\GoogleTagEventsPluginBase;
+use Drupal\views\ViewExecutable;
 
 /**
  * Views display GTM event plugin.
@@ -17,10 +18,8 @@ class GtmEventTestViewsDisplay extends GoogleTagEventsPluginBase {
 
   /**
    * The view object.
-   *
-   * @var \Drupal\views\ViewExecutable
    */
-  protected $view;
+  protected ViewExecutable $view;
 
   /**
    * Constructs a ProductPrintGtmEventsPlugin object.

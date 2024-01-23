@@ -10,9 +10,7 @@ namespace Drupal\Tests\google_tag_events\Functional;
 class GoogleTagEventsTest extends GoogleTagEventsTestsBase {
 
   /**
-   * Modules to install.
-   *
-   * @var array
+   * {@inheritdoc}
    */
   protected static $modules = [
     'google_tag',

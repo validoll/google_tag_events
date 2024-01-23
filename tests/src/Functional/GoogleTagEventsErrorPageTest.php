@@ -10,11 +10,9 @@ namespace Drupal\Tests\google_tag_events\Functional;
 class GoogleTagEventsErrorPageTest extends GoogleTagEventsTestsBase {
 
   /**
-   * Modules to install.
-   *
-   * @var array
+   * {@inheritdoc}
    */
-  protected static  $modules = [
+  protected static $modules = [
     'google_tag',
     'google_tag_events',
     'gtm_events_test',
