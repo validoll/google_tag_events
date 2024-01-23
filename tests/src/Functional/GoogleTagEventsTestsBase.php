@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\google_tag_events\Functional;
 
+use Drupal\google_tag_events\Form\SettingsForm;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -21,9 +22,9 @@ abstract class GoogleTagEventsTestsBase extends BrowserTestBase {
     parent::setUp();
 
     // Enable debug mode.
-    $config = $this->config('google_tag_events.settings');
-    $config->set('debug_mode', TRUE);
-    $config->save();
+    $this->config(SettingsForm::CONFIG_NAME)
+      ->set('debug_mode', TRUE)
+      ->save();
   }
 
 }

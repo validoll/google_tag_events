@@ -2,3 +2,5 @@ name: 'Google Tag Manager Events Test'
 type: module
 description: 'Testing module for GTM events functionality.'
 package: Testing
+dependencies:
+  - google_tag_events:google_tag_events

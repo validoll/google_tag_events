@@ -66,6 +66,12 @@ function gtm_events_test_page_bottom(array &$page_bottom) {
     google_tag_events_service()->setEvent('gtm_events_test_404');
   }
 
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    // Push the same event twice.
+    google_tag_events_service()->setEvent('gtm_events_test_front', ['event' => 'event_1']);
+    google_tag_events_service()->setEvent('gtm_events_test_front', ['event' => 'event_2']);
+  }
+
   $events = google_tag_events_service()->getEvents();
   if (empty($events)) {
     return;

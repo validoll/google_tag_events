@@ -141,7 +141,7 @@ class GoogleTagEvents {
    *   GTM status.
    */
   public function gtmIsEnabled() {
-    static $satisfied;
+    $satisfied = &drupal_static(__FUNCTION__);
 
     if (!isset($satisfied)) {
       if ($this->isDebugMode()) {
@@ -202,8 +202,17 @@ class GoogleTagEvents {
       return;
     }
 
-    $this->currentEvents[$name] = $this->currentEvents[$name] ?? [];
-    $this->currentEvents[$name] += $data;
+    // Allow to push the same event multiple times per session.
+    $key_name = $name;
+    $key_index = 0;
+
+    while (array_key_exists($key_name, $this->currentEvents)) {
+      $key_index++;
+      $key_name = $name . '_' . $key_index;
+    }
+
+    $this->currentEvents[$key_name] = $this->currentEvents[$key_name] ?? [];
+    $this->currentEvents[$key_name] += $data;
 
     if ($save_to_tempstore) {
       $this->saveEvents();

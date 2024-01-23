@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the GTM Events module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function gtm_events_test_install() {
+  \Drupal::configFactory()->getEditable('google_tag_events.settings')
+    ->set('debug_mode', TRUE)
+    ->save();
+}
