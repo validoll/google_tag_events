@@ -5,8 +5,8 @@ namespace Drupal\google_tag_events;
 use Drupal\Core\KeyValueStore\KeyValueExpirableFactoryInterface;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\Core\TempStore\PrivateTempStoreFactory as CorePrivateTempStoreFactory;
 use Drupal\Core\TempStore\PrivateTempStore;
+use Drupal\Core\TempStore\PrivateTempStoreFactory as CorePrivateTempStoreFactory;
 use Drupal\Core\TempStore\TempStoreException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,17 +18,13 @@ class PrivateTempStoreFactory extends CorePrivateTempStoreFactory {
 
   /**
    * The logger instance.
-   *
-   * @var \Psr\Log\LoggerInterface
    */
-  protected $logger;
+  protected LoggerInterface $logger;
 
   /**
    * Private temp store object class.
-   *
-   * @var string
    */
-  protected $privateTempStoreClass;
+  protected string $privateTempStoreClass;
 
   /**
    * {@inheritdoc}
@@ -63,14 +59,14 @@ class PrivateTempStoreFactory extends CorePrivateTempStoreFactory {
     }
     else {
       $temp_store = new PrivateTempStore($storage, $this->lockBackend, $this->currentUser, $this->requestStack, $this->expire);
-      $cookie_temp_store_value = unserialize((string) $cookie_temp_store->get($collection)) ?: [];
+      $cookie_temp_store_value = unserialize((string) $cookie_temp_store->get($collection), ['allowed_classes' => FALSE]) ?: [];
 
       if (empty($cookie_temp_store_value)) {
         return $temp_store;
       }
 
       // Move data fom cookie to temp store.
-      $temp_store_value = unserialize((string) $temp_store->get($collection)) ?: [];
+      $temp_store_value = unserialize((string) $temp_store->get($collection), ['allowed_classes' => FALSE]) ?: [];
       $temp_store_value += $cookie_temp_store_value;
 
       try {

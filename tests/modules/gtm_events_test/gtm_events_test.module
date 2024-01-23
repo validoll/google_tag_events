@@ -6,9 +6,9 @@
  */
 
 use Drupal\Component\Serialization\Json;
-use Drupal\node\Entity\Node;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_help().
@@ -20,9 +20,8 @@ function gtm_events_test_help($route_name, RouteMatchInterface $route_match) {
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
       $output .= '<p>' . t('Tests and examples for google_tag_events module.') . '</p>';
-      return $output;
 
-    default:
+      return $output;
   }
 }
 
@@ -47,6 +46,7 @@ function gtm_events_test_page_bottom(array &$page_bottom) {
     /** @var \Drupal\node\Entity\Node $node */
     $node = Node::load($matches[1]);
     $node_type = $node ? $node->getType() : NULL;
+
     switch ($node_type) {
       case 'article':
         google_tag_events_service()->setEvent('gtm_events_test_article_view');
@@ -73,6 +73,7 @@ function gtm_events_test_page_bottom(array &$page_bottom) {
   }
 
   $events = google_tag_events_service()->getEvents();
+
   if (empty($events)) {
     return;
   }
@@ -104,6 +105,7 @@ function gtm_events_test_preprocess_views_view(&$variables) {
   if (!isset($variables['id']) || !isset($variables['view'])) {
     return;
   }
+
   /** @var \Drupal\views\ViewExecutable $view */
   $view = $variables['view'];
   $data = ['view' => $view];
@@ -119,6 +121,7 @@ function gtm_events_test_preprocess_views_view(&$variables) {
 
   // Render events to view body to call it after views caching.
   $events = google_tag_events_service()->getEvents();
+
   if (empty($events)) {
     return;
   }

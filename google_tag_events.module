@@ -18,9 +18,8 @@ function google_tag_events_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<h3>' . t('About') . '</h3>';
       $output .= '<p>' . t('The Google Tag Manager: Events module provides
        API to push events to GTM Datalayer from PHP.') . '</p>';
-      return $output;
 
-    default:
+      return $output;
   }
 }
 

@@ -2,12 +2,13 @@
 
 namespace Drupal\google_tag_events;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\TempStore\TempStoreException;
 use Drupal\google_tag\Entity\ContainerManagerInterface;
 use Drupal\google_tag_events\Form\SettingsForm;
@@ -31,52 +32,40 @@ class GoogleTagEvents {
    * address specific needs when loading config, rather than this property
    * directly. See \Drupal\Core\Form\ConfigFormBase::config() for an example of
    * this.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $configFactory;
+  protected ConfigFactoryInterface $configFactory;
 
   /**
    * Temporary storage.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStore
    */
-  protected $tempStore;
+  protected PrivateTempStore $tempStore;
 
   /**
    * GTM events plugin manager.
-   *
-   * @var \Drupal\google_tag_events\GoogleTagEventsPluginManager
    */
-  protected $pluginManager;
+  protected GoogleTagEventsPluginManager $pluginManager;
 
   /**
    * Array of current events to add.
    *
    * @var array
    */
-  protected $currentEvents = [];
+  protected array $currentEvents = [];
 
   /**
    * The GTM container manager.
-   *
-   * @var \Drupal\google_tag\Entity\ContainerManagerInterface
    */
-  protected $containerManager;
+  protected ContainerManagerInterface $containerManager;
 
   /**
    * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The logger instance.
-   *
-   * @var \Psr\Log\LoggerInterface
    */
-  protected $logger;
+  protected LoggerInterface $logger;
 
   /**
    * GoogleTagEvents constructor.
@@ -105,7 +94,7 @@ class GoogleTagEvents {
     $this->configFactory = $config_factory;
     $this->tempStore = $temp_store_factory->get(static::TYPE);
     $this->pluginManager = $plugin_manager;
-    $this->currentEvents = unserialize((string) $this->tempStore->get(static::TYPE) ?: 'a:0:{}');
+    $this->currentEvents = unserialize((string) $this->tempStore->get(static::TYPE) ?: 'a:0:{}', ['allowed_classes' => FALSE]);
     $this->containerManager = $container_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger;

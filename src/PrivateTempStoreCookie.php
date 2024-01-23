@@ -41,6 +41,7 @@ class PrivateTempStoreCookie extends PrivateTempStore {
 
     if (empty($value)) {
       $this->delete($key);
+
       return;
     }
 

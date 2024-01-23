@@ -13,10 +13,8 @@ abstract class GoogleTagEventsPluginBase extends PluginBase implements Container
 
   /**
    * Raw data.
-   *
-   * @var array
    */
-  protected $data = [];
+  protected array $data = [];
 
   /**
    * {@inheritdoc}
